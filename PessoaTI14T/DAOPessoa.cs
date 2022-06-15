@@ -23,6 +23,7 @@ namespace PessoaTI14T
         public string[] vetorNome;// vetor nome
         public string[] vetorTelefone;// vetor telefone
         public string[] vetorEndereco;// vetor endereço
+        public int contarcodigo;
 
         public DAOPessoa()
         {
@@ -90,6 +91,7 @@ namespace PessoaTI14T
             MySqlDataReader leitura = coletar.ExecuteReader();
 
             i = 0;
+            contarcodigo = 0;
             contador = 0;
 
             //Preencher os valores com dados do banco de dados
@@ -101,6 +103,7 @@ namespace PessoaTI14T
                 vetorNome[i] = leitura["Nome"] + "";
                 vetorTelefone[i] = leitura["telefone"] + "";
                 vetorEndereco[i] = leitura["edereco"] + "";
+                contarcodigo = contador;
                 i++;
                 contador++;
 
@@ -137,6 +140,13 @@ namespace PessoaTI14T
             return msg;
 
         }// fim do metodo de consulta
+        public int ConsultarCodigo()
+        {
+            Preenchervetor();
+            return vetorCodigo[contarcodigo];
+
+
+        }//fim do consultar codigo
 
         public long ConsultarCpf(int cod)
         {
@@ -208,6 +218,24 @@ namespace PessoaTI14T
             }
 
         }// fim do atualizar
+
+        public void Atualizar(int cod, string campo, long novoDado)
+        {
+            try
+            {
+                string query = "update pessoaTI14T set" + campo + " = '" + novoDado + "' where codigo = '" + cod + "'";
+                MySqlCommand sql = new MySqlCommand(query, conexao);
+                string resultado = "" + sql.ExecuteNonQuery();
+                MessageBox.Show(resultado + " linha afetada!");
+
+            }
+            catch (Exception erro)
+            {
+                MessageBox.Show("" + erro);
+            }
+
+        }// fim do atualizar
+
         public void Deletar(int cod)
         {
             try
